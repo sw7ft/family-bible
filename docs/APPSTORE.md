@@ -33,7 +33,7 @@ bible,kjv,king james,scripture,devotion,prayer,family,kjv bible,holy bible
 
 ## Review notes
 
-No login. Hold a verse for one second, then tap Note or Comment. After the verse is selected, tap a word to attach the note to that word. Profiles are top-right. On iPad the sections are in a sidebar; Command-← / Command-→ turns the chapter. Settings has Export / Import for the family’s writing (local file only) and Write a review. Texts are public-domain WEBU, BBE, and KJV. Maps are public-domain 1915 plates. Nothing is sent off the device. No donate button in the app.
+No login. Hold a verse for one second, then tap Note or Comment. After the verse is selected, tap a word to attach the note to that word. Profiles are top-right. On iPad the sections are in a sidebar; Command-← / Command-→ turns the chapter. Settings has Export / Import for the family’s writing (local file only), Write a review, and an optional tip jar (consumable IAP). Tips unlock nothing. Product IDs: `com.sw7ft.quietbible.tip.small` ($0.99 Thank you), `.tip.medium` ($2.99 A coffee), `.tip.large` ($4.99 A meal). Texts are public-domain WEBU, BBE, and KJV. Maps are public-domain 1915 plates. Writing stays on the device. No PayPal or web donate button in the app.
 
 ## Screenshots
 

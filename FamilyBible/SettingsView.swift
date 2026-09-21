@@ -4,6 +4,7 @@ import UniformTypeIdentifiers
 
 struct SettingsView: View {
     @EnvironmentObject private var store: ReadingStore
+    @StateObject private var tips = TipStore()
     @State private var exportDoc = FamilyBibleDocument(data: Data())
     @State private var exporting = false
     @State private var importing = false
@@ -59,10 +60,28 @@ struct SettingsView: View {
                 }
 
                 Section("Support SW7FT") {
-                    Text("A review on the App Store is the help Apple welcomes. Donate links stay on the web.")
+                    Text("A review is the help Apple welcomes. A tip is optional — nothing in the Bible changes. Apple handles the payment.")
                         .font(QuietFont.small(13))
                         .foregroundStyle(store.theme.mute)
                     Button("Write a review") { askReview() }
+                    ForEach(TipStore.offers) { offer in
+                        Button {
+                            Task { await tips.buy(offer) }
+                        } label: {
+                            HStack {
+                                Text(offer.name)
+                                Spacer()
+                                Text(tips.price(for: offer))
+                                    .foregroundStyle(store.theme.mute)
+                            }
+                        }
+                        .disabled(tips.busy)
+                    }
+                    if !tips.status.isEmpty {
+                        Text(tips.status)
+                            .font(QuietFont.small(13))
+                            .foregroundStyle(store.theme.accent)
+                    }
                     if let url = URL(string: "https://sw7ft.github.io/family-bible/") {
                         Link("SW7FT on the web", destination: url)
                     }

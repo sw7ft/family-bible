@@ -1,0 +1,66 @@
+{
+  "identifier" : "1A7CACEB-8451-4675-8172-F348D58F1EDE",
+  "nonRenewingSubscriptions" : [
+
+  ],
+  "products" : [
+    {
+      "displayPrice" : "0.99",
+      "familyShareable" : false,
+      "internalID" : "84237D53-0504-4D1D-B85F-FB2322BD7E5E",
+      "localizations" : [
+        {
+          "description" : "An optional thank you. Nothing in the Bible unlocks.",
+          "displayName" : "Thank you",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "com.sw7ft.quietbible.tip.small",
+      "referenceName" : "Tip small",
+      "type" : "Consumable"
+    },
+    {
+      "displayPrice" : "2.99",
+      "familyShareable" : false,
+      "internalID" : "5A50D9E8-66F0-4C33-9487-4708766D5B57",
+      "localizations" : [
+        {
+          "description" : "An optional thank you. Nothing in the Bible unlocks.",
+          "displayName" : "A coffee",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "com.sw7ft.quietbible.tip.medium",
+      "referenceName" : "Tip coffee",
+      "type" : "Consumable"
+    },
+    {
+      "displayPrice" : "4.99",
+      "familyShareable" : false,
+      "internalID" : "A4146FA3-F31C-4543-8B70-0801FAF6CB4D",
+      "localizations" : [
+        {
+          "description" : "An optional thank you. Nothing in the Bible unlocks.",
+          "displayName" : "A meal",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "com.sw7ft.quietbible.tip.large",
+      "referenceName" : "Tip meal",
+      "type" : "Consumable"
+    }
+  ],
+  "settings" : {
+    "_failTransactionsEnabled" : false,
+    "_storeKitErrors" : [
+
+    ]
+  },
+  "subscriptionGroups" : [
+
+  ],
+  "version" : {
+    "major" : 4,
+    "minor" : 0
+  }
+}
