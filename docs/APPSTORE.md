@@ -23,7 +23,7 @@ Use this when creating the listing. Support and privacy URLs must stay live.
 
 Family Bible is a simple reader for a family to keep together.
 
-Read the World English Bible, Bible in Basic English, or the King James Version. Mark a place. Write notes, comments, devotions, and prayers under a person’s name. Comments appear on the verse. Maps are from George Adam Smith’s 1915 atlas.
+Read the World English Bible, Bible in Basic English, or the King James Version. Mark a place. Write notes, comments, devotions, and prayers under a person’s name. Comments appear on the verse. Hold a verse, then tap a word to leave a note on that word. Maps are from George Adam Smith’s 1915 atlas.
 
 The words are public domain. Your writing and pictures stay on the phone. No account. No ads. No tracking.
 
@@ -33,7 +33,7 @@ bible,kjv,king james,scripture,devotion,prayer,family,kjv bible,holy bible
 
 ## Review notes
 
-No login. Hold a verse for one second, then tap Note or Comment. Profiles are top-right. On iPad the sections are in a sidebar; Command-← / Command-→ turns the chapter. Settings has Export / Import for the family’s writing (local file only) and Write a review. Texts are public-domain WEBU, BBE, and KJV. Maps are public-domain 1915 plates. Nothing is sent off the device. No donate button in the app.
+No login. Hold a verse for one second, then tap Note or Comment. After the verse is selected, tap a word to attach the note to that word. Profiles are top-right. On iPad the sections are in a sidebar; Command-← / Command-→ turns the chapter. Settings has Export / Import for the family’s writing (local file only) and Write a review. Texts are public-domain WEBU, BBE, and KJV. Maps are public-domain 1915 plates. Nothing is sent off the device. No donate button in the app.
 
 ## Screenshots
 

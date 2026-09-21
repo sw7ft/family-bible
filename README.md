@@ -2,7 +2,7 @@
 
 A quiet family Bible for iPhone and iPad. Public-domain English text only. Published by [SW7FT](https://github.com/sw7ft). App Store notes: [docs/APPSTORE.md](docs/APPSTORE.md).
 
-**Read** World English, Basic English, or King James. **Mark a place.** Write **notes, comments, devotions, and prayers** under a family profile. Comments show on the verse with that person’s name. **Maps** are twenty-four plates from George Adam Smith’s 1915 atlas.
+**Read** World English, Basic English, or King James. **Mark a place.** Write **notes, comments, devotions, and prayers** under a family profile. Comments show on the verse with that person’s name. Hold a verse, then tap a word to leave a note on that word. **Maps** are twenty-four plates from George Adam Smith’s 1915 atlas.
 
 Nothing is sent off the phone. No account. No ads. No tracking.
 

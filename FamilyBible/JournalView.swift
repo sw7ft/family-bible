@@ -133,7 +133,7 @@ struct JournalListView: View {
                             HStack(spacing: 8) {
                                 Text(entry.updated.formatted(date: .abbreviated, time: .omitted))
                                 if let bookId = entry.bookId, let chapter = entry.chapter {
-                                    Text(store.placeLabel(bookId: bookId, chapter: chapter, verse: entry.verse, verseEnd: entry.verseEnd))
+                                    Text(store.placeLabel(bookId: bookId, chapter: chapter, verse: entry.verse, verseEnd: entry.verseEnd, word: entry.wordText))
                                 }
                                 if entry.photoIds.count > 1 {
                                     Text("\(entry.photoIds.count) pictures")
@@ -242,7 +242,7 @@ struct JournalEditor: View {
                     }
                 ))
                 if let bookId = entry.bookId, let chapter = entry.chapter {
-                    Button("Open \(store.placeLabel(bookId: bookId, chapter: chapter, verse: entry.verse, verseEnd: entry.verseEnd))") {
+                    Button("Open \(store.placeLabel(bookId: bookId, chapter: chapter, verse: entry.verse, verseEnd: entry.verseEnd, word: entry.wordText))") {
                         if let book = store.book(id: bookId) {
                             store.open(book, chapter: chapter, verse: entry.verse)
                         }

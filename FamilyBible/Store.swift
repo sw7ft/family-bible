@@ -518,21 +518,42 @@ final class ReadingStore: ObservableObject {
         }
     }
 
-    func datedReference(bookId: String, chapter: Int, verse: Int? = nil, verseEnd: Int? = nil, on date: Date = Date()) -> String {
-        let when = date.formatted(date: .abbreviated, time: .omitted)
-        return "\(placeLabel(bookId: bookId, chapter: chapter, verse: verse, verseEnd: verseEnd)) · \(when)"
+    func wordMarks(verse: Int) -> Set<Int> {
+        var marks = Set<Int>()
+        for item in familyOn(bookId: bookId, chapter: chapter, verse: verse) {
+            guard let start = item.entry.wordIndex else { continue }
+            let end = item.entry.wordEnd ?? start
+            for n in min(start, end)...max(start, end) { marks.insert(n) }
+        }
+        return marks
     }
 
-    func placeLabel(bookId: String, chapter: Int, verse: Int? = nil, verseEnd: Int? = nil) -> String {
+    func hasWordNote(verse: Int, word: Int) -> Bool {
+        wordMarks(verse: verse).contains(word)
+    }
+
+    func datedReference(bookId: String, chapter: Int, verse: Int? = nil, verseEnd: Int? = nil, word: String? = nil, on date: Date = Date()) -> String {
+        let when = date.formatted(date: .abbreviated, time: .omitted)
+        return "\(placeLabel(bookId: bookId, chapter: chapter, verse: verse, verseEnd: verseEnd, word: word)) · \(when)"
+    }
+
+    func placeLabel(bookId: String, chapter: Int, verse: Int? = nil, verseEnd: Int? = nil, word: String? = nil) -> String {
         let name = book(id: bookId)?.name ?? bookId
+        let base: String
         if let verse {
             let end = verseEnd ?? verse
             if end != verse {
-                return "\(name) \(chapter):\(verse)–\(end)"
+                base = "\(name) \(chapter):\(verse)–\(end)"
+            } else {
+                base = "\(name) \(chapter):\(verse)"
             }
-            return "\(name) \(chapter):\(verse)"
+        } else {
+            base = "\(name) \(chapter)"
         }
-        return "\(name) \(chapter)"
+        if let word, !word.isEmpty {
+            return "\(base) · “\(word)”"
+        }
+        return base
     }
 
     func bookmarkLabel(_ passage: Passage) -> String {
@@ -640,9 +661,12 @@ struct JournalEntry: Identifiable, Codable, Equatable {
     var photoIds: [String]
     var prayerLine: String
     var sitWith: String
+    var wordIndex: Int?
+    var wordEnd: Int?
+    var wordText: String?
 
     enum CodingKeys: String, CodingKey {
-        case id, kind, title, body, created, updated, bookId, chapter, verse, verseEnd, photoIds, prayerLine, sitWith
+        case id, kind, title, body, created, updated, bookId, chapter, verse, verseEnd, photoIds, prayerLine, sitWith, wordIndex, wordEnd, wordText
     }
 
     init(
@@ -658,7 +682,10 @@ struct JournalEntry: Identifiable, Codable, Equatable {
         verseEnd: Int? = nil,
         photoIds: [String] = [],
         prayerLine: String = "",
-        sitWith: String = ""
+        sitWith: String = "",
+        wordIndex: Int? = nil,
+        wordEnd: Int? = nil,
+        wordText: String? = nil
     ) {
         self.id = id
         self.kind = kind
@@ -673,6 +700,9 @@ struct JournalEntry: Identifiable, Codable, Equatable {
         self.photoIds = photoIds
         self.prayerLine = prayerLine
         self.sitWith = sitWith
+        self.wordIndex = wordIndex
+        self.wordEnd = wordEnd
+        self.wordText = wordText
     }
 
     init(from decoder: Decoder) throws {
@@ -690,6 +720,29 @@ struct JournalEntry: Identifiable, Codable, Equatable {
         photoIds = try c.decodeIfPresent([String].self, forKey: .photoIds) ?? []
         prayerLine = try c.decodeIfPresent(String.self, forKey: .prayerLine) ?? ""
         sitWith = try c.decodeIfPresent(String.self, forKey: .sitWith) ?? ""
+        wordIndex = try c.decodeIfPresent(Int.self, forKey: .wordIndex)
+        wordEnd = try c.decodeIfPresent(Int.self, forKey: .wordEnd)
+        wordText = try c.decodeIfPresent(String.self, forKey: .wordText)
+    }
+
+    func encode(to encoder: Encoder) throws {
+        var c = encoder.container(keyedBy: CodingKeys.self)
+        try c.encode(id, forKey: .id)
+        try c.encode(kind, forKey: .kind)
+        try c.encode(title, forKey: .title)
+        try c.encode(body, forKey: .body)
+        try c.encode(created, forKey: .created)
+        try c.encode(updated, forKey: .updated)
+        try c.encodeIfPresent(bookId, forKey: .bookId)
+        try c.encodeIfPresent(chapter, forKey: .chapter)
+        try c.encodeIfPresent(verse, forKey: .verse)
+        try c.encodeIfPresent(verseEnd, forKey: .verseEnd)
+        try c.encode(photoIds, forKey: .photoIds)
+        try c.encode(prayerLine, forKey: .prayerLine)
+        try c.encode(sitWith, forKey: .sitWith)
+        try c.encodeIfPresent(wordIndex, forKey: .wordIndex)
+        try c.encodeIfPresent(wordEnd, forKey: .wordEnd)
+        try c.encodeIfPresent(wordText, forKey: .wordText)
     }
 
     func covers(verse n: Int) -> Bool {
