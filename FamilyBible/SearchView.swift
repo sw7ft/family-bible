@@ -10,10 +10,13 @@ struct SearchHit: Identifiable {
 }
 
 struct SearchView: View {
+    private let pageSize = 40
+
     @EnvironmentObject private var store: ReadingStore
     @State private var query = ""
     @State private var hits: [SearchHit] = []
     @State private var reference: VerseRef?
+    @State private var moreAhead = false
 
     var body: some View {
         NavigationStack {
@@ -63,6 +66,33 @@ struct SearchView: View {
                         .padding(.vertical, 4)
                     }
                 }
+
+                if !hits.isEmpty {
+                    Text(hits.count == 1 ? "1 verse" : "\(hits.count) verses")
+                        .font(QuietFont.small(13))
+                        .foregroundStyle(store.theme.mute)
+                        .listRowBackground(Color.clear)
+                }
+
+                if moreAhead, let last = hits.last {
+                    Button(action: lookFarther) {
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text("Look farther down")
+                                .font(QuietFont.display(20))
+                                .foregroundStyle(store.theme.accent)
+                            Text("After \(last.book.name) \(last.chapter):\(last.verse)")
+                                .font(QuietFont.small(14))
+                                .foregroundStyle(store.theme.mute)
+                        }
+                        .padding(.vertical, 6)
+                    }
+                    .accessibilityHint("Search the next verses after this place.")
+                } else if hits.count >= pageSize {
+                    Text("That’s all in \(store.translation.label).")
+                        .font(QuietFont.small(14))
+                        .foregroundStyle(store.theme.mute)
+                        .listRowBackground(Color.clear)
+                }
             }
             .scrollContentBackground(.hidden)
             .background(store.theme.page)
@@ -92,7 +122,15 @@ struct SearchView: View {
 
     private func refresh(_ raw: String) {
         reference = ScriptureLookup.parse(raw, books: store.translation.books)
-        hits = find(raw)
+        let page = find(raw, after: nil)
+        hits = page.hits
+        moreAhead = page.more
+    }
+
+    private func lookFarther() {
+        let page = find(query, after: hits.last)
+        hits.append(contentsOf: page.hits)
+        moreAhead = page.more
     }
 
     private func verseText(_ ref: VerseRef) -> String? {
@@ -103,14 +141,23 @@ struct SearchView: View {
         return verses.first
     }
 
-    private func find(_ raw: String) -> [SearchHit] {
+    private func find(_ raw: String, after last: SearchHit?) -> (hits: [SearchHit], more: Bool) {
         let needle = raw.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
-        if reference != nil, needle.split(separator: " ").count <= 3 { return [] }
-        guard needle.count >= 3 else { return [] }
+        if reference != nil, needle.split(separator: " ").count <= 3 { return ([], false) }
+        guard needle.count >= 3 else { return ([], false) }
         var out: [SearchHit] = []
+        var skipping = last != nil
         for book in store.translation.books {
             for (chapterIndex, verses) in book.chapters.enumerated() {
                 for (verseIndex, text) in verses.enumerated() {
+                    if skipping {
+                        if book.id == last?.book.id,
+                           chapterIndex + 1 == last?.chapter,
+                           verseIndex + 1 == last?.verse {
+                            skipping = false
+                        }
+                        continue
+                    }
                     if text.lowercased().contains(needle) {
                         out.append(
                             SearchHit(
@@ -121,11 +168,13 @@ struct SearchView: View {
                                 text: text
                             )
                         )
-                        if out.count >= 40 { return out }
+                        if out.count >= pageSize {
+                            return (out, true)
+                        }
                     }
                 }
             }
         }
-        return out
+        return (out, false)
     }
 }

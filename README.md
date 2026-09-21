@@ -37,6 +37,7 @@ bash deploy-device.sh
 | Text | WEBU (default), BBE, KJV — public domain |
 | Family | Profiles top-right; each person keeps their own writing |
 | Journal | Notes, comments, devotions, prayers, answered prayers |
+| Search | Reference or a word; Look farther down keeps going past the first page |
 | Maps | Smith 1915 Holy Land plates, public domain |
 | Pictures | Camera or library, stored on device only |
 
