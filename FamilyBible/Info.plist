@@ -4,7 +4,11 @@
 <dict>
 	<key>CFBundleDisplayName</key>
 	<string>Family Bible</string>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
+	<key>NSHumanReadableCopyright</key>
+	<string>Copyright © 2026 SW7FT</string>
 	<key>NSCameraUsageDescription</key>
-	<string>Family Bible uses the camera to attach a picture to a note.</string>
+	<string>Family Bible uses the camera when you attach a picture to a note, comment, devotion, or prayer.</string>
 </dict>
 </plist>

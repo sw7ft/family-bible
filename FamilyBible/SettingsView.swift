@@ -46,6 +46,9 @@ struct SettingsView: View {
                     Text("Maps: George Adam Smith, Atlas of the Historical Geography of the Holy Land, 1915.")
                         .font(QuietFont.small(13))
                         .foregroundStyle(store.theme.mute)
+                    Text(versionLine)
+                        .font(QuietFont.small(13))
+                        .foregroundStyle(store.theme.mute)
                     if let url = URL(string: "https://sw7ft.github.io/family-bible/") {
                         Link("Support and source", destination: url)
                     }
@@ -56,7 +59,7 @@ struct SettingsView: View {
             }
             .scrollContentBackground(.hidden)
             .background(store.theme.page)
-            .navigationTitle("Reading")
+            .navigationTitle("Settings")
             .quietBar()
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
@@ -64,5 +67,14 @@ struct SettingsView: View {
                 }
             }
         }
+    }
+
+    private var versionLine: String {
+        let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0"
+        let build = Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? ""
+        if build.isEmpty {
+            return "Family Bible \(version) · © 2026 SW7FT"
+        }
+        return "Family Bible \(version) (\(build)) · © 2026 SW7FT"
     }
 }

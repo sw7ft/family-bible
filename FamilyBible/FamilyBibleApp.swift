@@ -63,7 +63,7 @@ struct RootView: View {
                 .tabItem { Label("Journal", systemImage: "heart.text.square") }
                 .tag("journal")
             SettingsView()
-                .tabItem { Label("Settings", systemImage: "textformat.size") }
+                .tabItem { Label("Settings", systemImage: "gearshape") }
                 .tag("settings")
         }
         .tint(store.theme.accent)
