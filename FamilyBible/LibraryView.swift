@@ -94,7 +94,10 @@ struct LibraryView: View {
 struct ChapterPicker: View {
     @EnvironmentObject private var store: ReadingStore
     let book: Book
-    private let columns = [GridItem(.adaptive(minimum: 52), spacing: 10)]
+    @Environment(\.horizontalSizeClass) private var size
+    private var columns: [GridItem] {
+        [GridItem(.adaptive(minimum: size == .regular ? 72 : 52), spacing: 10)]
+    }
 
     var body: some View {
         ScrollView {
@@ -119,9 +122,10 @@ struct ChapterPicker: View {
                             }
                     }
                     .buttonStyle(.plain)
+                    .hoverEffect(.highlight)
                 }
             }
-            .padding(20)
+            .padding(size == .regular ? 28 : 20)
         }
         .background(store.theme.page)
         .navigationTitle(book.name)

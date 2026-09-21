@@ -12,7 +12,7 @@ Use this when creating the listing. Support and privacy URLs must stay live.
 | Category | Reference (primary). Books optional secondary. |
 | Age | 4+ |
 | Price | Free |
-| Devices | iPhone only, portrait |
+| Devices | iPhone (portrait) and iPad (portrait + landscape) |
 | Encryption | Exempt — `ITSAppUsesNonExemptEncryption` is `NO` |
 | Privacy nutrition | No data collected |
 | Support | https://sw7ft.github.io/family-bible/ |
@@ -33,13 +33,15 @@ bible,kjv,king james,scripture,devotion,prayer,family,kjv bible,holy bible
 
 ## Review notes
 
-No login. Hold a verse for one second, then tap Note or Comment. Profiles are top-right. Texts are public-domain WEBU, BBE, and KJV. Maps are public-domain 1915 plates. Nothing is sent off the device.
+No login. Hold a verse for one second, then tap Note or Comment. Profiles are top-right. On iPad the sections are in a sidebar; Command-← / Command-→ turns the chapter. Texts are public-domain WEBU, BBE, and KJV. Maps are public-domain 1915 plates. Nothing is sent off the device.
 
 ## Screenshots
 
-Need at least one 6.9-inch iPhone portrait shot (1320×2868, 1290×2796, or 1260×2736). iPhone 16 Pro Max is 6.9-inch. No iPad shots — this build is iPhone only. Do not include alpha or the status-bar clock showing a debug build if you can avoid it.
+Need at least one 6.9-inch iPhone portrait shot (1320×2868, 1290×2796, or 1260×2736). iPhone 16 Pro Max is 6.9-inch.
 
-Suggested set: reader (John 1), a verse with a family comment, Journal, Books / maps, Settings → This Bible.
+Because the app runs on iPad, also need one 13-inch iPad shot (2048×2732 or 2064×2752 portrait). Suggested: reader with the sidebar, plus a landscape 13-inch if you want.
+
+Do not include alpha. Suggested iPhone set: reader (John 1), a verse with a family comment, Journal, Books / maps, Settings → This Bible.
 
 ## Archive
 

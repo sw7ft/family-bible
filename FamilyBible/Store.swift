@@ -32,7 +32,9 @@ final class ReadingStore: ObservableObject {
     @Published var profileId: UUID {
         didSet { UserDefaults.standard.set(profileId.uuidString, forKey: "qb.profileId") }
     }
-    @Published var tab = "read"
+    @Published var tab: String {
+        didSet { UserDefaults.standard.set(tab, forKey: "qb.tab") }
+    }
     @Published var focusVerse: Int?
     @Published var entries: [JournalEntry] {
         didSet { persistJournal() }
@@ -61,6 +63,7 @@ final class ReadingStore: ObservableObject {
         profileId = loaded.profileId
         bookmarks = []
         entries = []
+        tab = UserDefaults.standard.string(forKey: "qb.tab") ?? "read"
         bookId = "john"
         chapter = 1
         applyProfileData(Self.readProfileBundle(id: loaded.profileId), persistLegacy: false)

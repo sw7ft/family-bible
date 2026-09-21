@@ -48,6 +48,24 @@ extension View {
 
 struct RootView: View {
     @EnvironmentObject private var store: ReadingStore
+    @Environment(\.horizontalSizeClass) private var size
+
+    var body: some View {
+        Group {
+            if size == .regular {
+                PadRoot()
+            } else {
+                PhoneRoot()
+            }
+        }
+        .tint(store.theme.accent)
+        .background(store.theme.page.ignoresSafeArea())
+    }
+}
+
+struct PhoneRoot: View {
+    @EnvironmentObject private var store: ReadingStore
+
     var body: some View {
         TabView(selection: $store.tab) {
             ReaderView()
@@ -66,8 +84,46 @@ struct RootView: View {
                 .tabItem { Label("Settings", systemImage: "gearshape") }
                 .tag("settings")
         }
-        .tint(store.theme.accent)
         .quietTabs()
-        .background(store.theme.page.ignoresSafeArea())
+    }
+}
+
+struct PadRoot: View {
+    @EnvironmentObject private var store: ReadingStore
+
+    var body: some View {
+        NavigationSplitView {
+            List(selection: tabPick) {
+                Section {
+                    Label("Read", systemImage: "book").tag("read")
+                    Label("Books", systemImage: "list.bullet").tag("books")
+                    Label("Search", systemImage: "magnifyingglass").tag("search")
+                    Label("Journal", systemImage: "heart.text.square").tag("journal")
+                    Label("Settings", systemImage: "gearshape").tag("settings")
+                }
+            }
+            .listStyle(.sidebar)
+            .navigationTitle("Family Bible")
+            .scrollContentBackground(.hidden)
+            .background(store.theme.page)
+            .quietBar()
+            .navigationSplitViewColumnWidth(min: 220, ideal: 260, max: 320)
+        } detail: {
+            switch store.tab {
+            case "books": LibraryView()
+            case "search": SearchView()
+            case "journal": JournalView()
+            case "settings": SettingsView()
+            default: ReaderView()
+            }
+        }
+        .navigationSplitViewStyle(.balanced)
+    }
+
+    private var tabPick: Binding<String?> {
+        Binding(
+            get: { store.tab },
+            set: { if let value = $0 { store.tab = value } }
+        )
     }
 }

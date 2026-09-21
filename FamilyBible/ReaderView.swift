@@ -3,6 +3,7 @@ import UIKit
 
 struct ReaderView: View {
     @EnvironmentObject private var store: ReadingStore
+    @Environment(\.horizontalSizeClass) private var size
     @State private var verseNote: VerseAnchor?
     @State private var noteHeight = PresentationDetent.large
     @State private var pickStart: Int?
@@ -54,10 +55,10 @@ struct ReaderView: View {
                                 }
                             }
                         }
-                        .padding(.horizontal, 22)
+                        .padding(.horizontal, size == .regular ? 40 : 22)
                         .padding(.top, 8)
                         .padding(.bottom, pickStart == nil ? 20 : 140)
-                        .frame(maxWidth: 720, alignment: .leading)
+                        .frame(maxWidth: size == .regular ? 880 : 720, alignment: .leading)
                         .frame(maxWidth: .infinity)
                     }
                     .scrollIndicators(.hidden)
@@ -108,6 +109,16 @@ struct ReaderView: View {
             .animation(.spring(duration: 0.38, bounce: 0.22), value: store.isAtPlace)
             .navigationBarTitleDisplayMode(.inline)
             .quietBar()
+            .background {
+                HStack {
+                    Button("Previous chapter") { turn(-1) }
+                        .keyboardShortcut(.leftArrow, modifiers: .command)
+                    Button("Next chapter") { turn(1) }
+                        .keyboardShortcut(.rightArrow, modifiers: .command)
+                }
+                .opacity(0.001)
+                .accessibilityHidden(true)
+            }
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button { tapPlace() } label: {
@@ -358,6 +369,8 @@ struct ReaderView: View {
             RoundedRectangle(cornerRadius: 18, style: .continuous)
                 .stroke(store.theme.ink.opacity(0.08), lineWidth: 1)
         )
+        .frame(maxWidth: 560)
+        .frame(maxWidth: .infinity)
         .padding(.horizontal, 16)
         .padding(.bottom, 10)
     }

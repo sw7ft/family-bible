@@ -19,9 +19,12 @@ struct JournalView: View {
                             journalCard(kind)
                         }
                         .buttonStyle(.plain)
+                        .hoverEffect(.highlight)
                     }
                 }
                 .padding(22)
+                .frame(maxWidth: 720, alignment: .leading)
+                .frame(maxWidth: .infinity)
             }
             .background(store.theme.page)
             .navigationTitle("Journal")
