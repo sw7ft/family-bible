@@ -1,4 +1,4 @@
-# Quiet Bible — text sources
+# Family Bible — text sources
 
 This app ships only public-domain English Bibles. No NIV, ESV, NASB, or other copyrighted text.
 

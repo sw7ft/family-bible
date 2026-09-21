@@ -10,16 +10,15 @@ Nothing is sent off the phone. No account. No ads. No tracking.
 - Privacy: https://sw7ft.github.io/family-bible/privacy.html
 - Sources: [LEGAL.md](LEGAL.md)
 
-Bundle `com.sw7ft.quietbible`. Team `RB6YQW2B5J`.
+The product name is **Family Bible**. The iOS bundle id is still `com.sw7ft.quietbible` so existing installs keep their notes. Team `RB6YQW2B5J`.
 
 ## Build
 
 Needs Xcode 16+, [XcodeGen](https://github.com/yonaskolb/XcodeGen), and an Apple Development team.
 
 ```bash
-cd quiet-bible
 xcodegen generate
-open QuietBible.xcodeproj
+open FamilyBible.xcodeproj
 ```
 
 To install on a plugged-in iPhone:

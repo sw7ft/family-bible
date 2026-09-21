@@ -7,7 +7,7 @@ from collections import OrderedDict
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-OUT = ROOT / "QuietBible" / "Resources"
+OUT = ROOT / "FamilyBible" / "Resources"
 OUT.mkdir(parents=True, exist_ok=True)
 
 OT = {

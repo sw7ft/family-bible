@@ -1,4 +1,4 @@
-name: QuietBible
+name: FamilyBible
 options:
   bundleIdPrefix: com.sw7ft
   deploymentTarget:
@@ -9,21 +9,21 @@ settings:
   CODE_SIGN_STYLE: Automatic
   SWIFT_VERSION: "5.0"
 targets:
-  QuietBible:
+  FamilyBible:
     type: application
     platform: iOS
     deploymentTarget: "17.0"
     sources:
-      - path: QuietBible
+      - path: FamilyBible
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.sw7ft.quietbible
         PRODUCT_NAME: Family Bible
         MARKETING_VERSION: "1.0"
-        CURRENT_PROJECT_VERSION: "48"
+        CURRENT_PROJECT_VERSION: "49"
         TARGETED_DEVICE_FAMILY: "1,2"
         GENERATE_INFOPLIST_FILE: YES
-        INFOPLIST_FILE: QuietBible/Info.plist
+        INFOPLIST_FILE: FamilyBible/Info.plist
         INFOPLIST_KEY_CFBundleDisplayName: Family Bible
         INFOPLIST_KEY_UILaunchScreen_Generation: YES
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon

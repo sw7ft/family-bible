@@ -13,7 +13,7 @@ fi
 python3 make-icon.py
 /opt/homebrew/bin/xcodegen generate
 DD="$PWD/.derivedData"
-xcodebuild -project QuietBible.xcodeproj -scheme QuietBible \
+xcodebuild -project FamilyBible.xcodeproj -scheme FamilyBible \
   -destination "id=$DEVICE" \
   -derivedDataPath "$DD" \
   -allowProvisioningUpdates \

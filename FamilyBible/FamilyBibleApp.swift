@@ -2,7 +2,7 @@ import SwiftUI
 import UIKit
 
 @main
-struct QuietBibleApp: App {
+struct FamilyBibleApp: App {
     @StateObject private var store = ReadingStore()
 
     init() {

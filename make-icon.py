@@ -6,7 +6,7 @@ import zlib
 from pathlib import Path
 
 W = H = 1024
-OUT = Path(__file__).resolve().parent / "QuietBible" / "Assets.xcassets" / "AppIcon.appiconset" / "AppIcon.png"
+OUT = Path(__file__).resolve().parent / "FamilyBible" / "Assets.xcassets" / "AppIcon.appiconset" / "AppIcon.png"
 
 
 def mix(a, b, t):

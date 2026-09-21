@@ -4,8 +4,13 @@ import PhotosUI
 
 enum NotePhotos {
     static var directory: URL {
-        let base = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
-            .appendingPathComponent("QuietBible/note-photos", isDirectory: true)
+        let support = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
+        let base = support.appendingPathComponent("FamilyBible/note-photos", isDirectory: true)
+        let legacy = support.appendingPathComponent("QuietBible/note-photos", isDirectory: true)
+        if FileManager.default.fileExists(atPath: legacy.path), !FileManager.default.fileExists(atPath: base.path) {
+            try? FileManager.default.createDirectory(at: base.deletingLastPathComponent(), withIntermediateDirectories: true)
+            try? FileManager.default.moveItem(at: legacy, to: base)
+        }
         if !FileManager.default.fileExists(atPath: base.path) {
             try? FileManager.default.createDirectory(at: base, withIntermediateDirectories: true)
         }
