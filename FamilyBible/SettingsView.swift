@@ -1,7 +1,13 @@
 import SwiftUI
+import StoreKit
+import UniformTypeIdentifiers
 
 struct SettingsView: View {
     @EnvironmentObject private var store: ReadingStore
+    @State private var exportDoc = FamilyBibleDocument(data: Data())
+    @State private var exporting = false
+    @State private var importing = false
+    @State private var status = ""
 
     var body: some View {
         NavigationStack {
@@ -39,6 +45,29 @@ struct SettingsView: View {
                         .padding(.vertical, 6)
                 }
 
+                Section("This family's writing") {
+                    Text("Export keeps notes, comments, journals, prayers, places, and pictures in a file you choose. Import adds them back. Nothing is sent to SW7FT.")
+                        .font(QuietFont.small(13))
+                        .foregroundStyle(store.theme.mute)
+                    Button("Export…") { exportFamily() }
+                    Button("Import…") { importing = true }
+                    if !status.isEmpty {
+                        Text(status)
+                            .font(QuietFont.small(13))
+                            .foregroundStyle(store.theme.accent)
+                    }
+                }
+
+                Section("Support SW7FT") {
+                    Text("A review on the App Store is the help Apple welcomes. Donate links stay on the web.")
+                        .font(QuietFont.small(13))
+                        .foregroundStyle(store.theme.mute)
+                    Button("Write a review") { askReview() }
+                    if let url = URL(string: "https://sw7ft.github.io/family-bible/") {
+                        Link("SW7FT on the web", destination: url)
+                    }
+                }
+
                 Section("This Bible") {
                     Text("Published by SW7FT. The words are public domain. Your writing and pictures stay on this phone — no account, no ads, no tracking.")
                         .font(QuietFont.small(14))
@@ -49,9 +78,6 @@ struct SettingsView: View {
                     Text(versionLine)
                         .font(QuietFont.small(13))
                         .foregroundStyle(store.theme.mute)
-                    if let url = URL(string: "https://sw7ft.github.io/family-bible/") {
-                        Link("Support and source", destination: url)
-                    }
                     if let url = URL(string: "https://sw7ft.github.io/family-bible/privacy.html") {
                         Link("Privacy", destination: url)
                     }
@@ -66,7 +92,61 @@ struct SettingsView: View {
                     ProfileButton()
                 }
             }
+            .fileExporter(
+                isPresented: $exporting,
+                document: exportDoc,
+                contentType: .json,
+                defaultFilename: exportName
+            ) { result in
+                switch result {
+                case .success:
+                    status = "Saved. Keep that file with the family."
+                case .failure(let error):
+                    status = error.localizedDescription
+                }
+            }
+            .fileImporter(isPresented: $importing, allowedContentTypes: [.json]) { result in
+                switch result {
+                case .success(let url):
+                    importFamily(from: url)
+                case .failure(let error):
+                    status = error.localizedDescription
+                }
+            }
         }
+    }
+
+    private var exportName: String {
+        "Family Bible \(Date().formatted(date: .abbreviated, time: .omitted))"
+    }
+
+    private func exportFamily() {
+        do {
+            exportDoc = FamilyBibleDocument(data: try store.exportFamily())
+            exporting = true
+            status = ""
+        } catch {
+            status = error.localizedDescription
+        }
+    }
+
+    private func importFamily(from url: URL) {
+        do {
+            let got = url.startAccessingSecurityScopedResource()
+            defer { if got { url.stopAccessingSecurityScopedResource() } }
+            let data = try Data(contentsOf: url)
+            try store.importFamily(data)
+            status = "Added. Existing writing was kept; matching items were updated."
+        } catch {
+            status = error.localizedDescription
+        }
+    }
+
+    private func askReview() {
+        guard let scene = UIApplication.shared.connectedScenes
+            .compactMap({ $0 as? UIWindowScene })
+            .first(where: { $0.activationState == .foregroundActive }) else { return }
+        SKStoreReviewController.requestReview(in: scene)
     }
 
     private var versionLine: String {

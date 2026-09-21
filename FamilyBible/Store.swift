@@ -389,6 +389,124 @@ final class ReadingStore: ObservableObject {
         familyOn(bookId: bookId, chapter: chapter, verse: verse).filter { $0.entry.kind == .comment }
     }
 
+    func exportFamily() throws -> Data {
+        persistProfileBundle()
+        let people = profiles.map { profile -> FamilyPersonFile in
+            let bundle = profile.id == profileId
+                ? ProfileBundle(bookId: bookId, chapter: chapter, bookmarks: bookmarks, entries: entries)
+                : Self.readProfileBundle(id: profile.id)
+            return FamilyPersonFile(
+                id: profile.id,
+                name: profile.name,
+                bookId: bundle.bookId,
+                chapter: bundle.chapter,
+                bookmarks: bundle.bookmarks.map {
+                    StoredPassage(translation: $0.translation, bookId: $0.bookId, chapter: $0.chapter, verse: $0.verse)
+                },
+                entries: bundle.entries
+            )
+        }
+        var photos: [String: String] = [:]
+        for person in people {
+            for entry in person.entries {
+                for id in entry.photoIds where photos[id] == nil {
+                    if let data = try? Data(contentsOf: NotePhotos.url(id)) {
+                        photos[id] = data.base64EncodedString()
+                    }
+                }
+            }
+        }
+        let pack = FamilyPackFile(
+            format: 1,
+            app: "Family Bible",
+            exported: Date(),
+            profileId: profileId,
+            profiles: people,
+            photos: photos
+        )
+        let encoder = JSONEncoder()
+        encoder.dateEncodingStrategy = .iso8601
+        encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
+        return try encoder.encode(pack)
+    }
+
+    func importFamily(_ data: Data) throws {
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
+        let pack = try decoder.decode(FamilyPackFile.self, from: data)
+        guard pack.format == 1 else {
+            throw FamilyPackError.unsupported
+        }
+        persistProfileBundle()
+        for (id, encoded) in pack.photos {
+            if let bytes = Data(base64Encoded: encoded) {
+                try? bytes.write(to: NotePhotos.url(id), options: .atomic)
+            }
+        }
+        ready = false
+        for person in pack.profiles {
+            if profiles.contains(where: { $0.id == person.id }) {
+                if let idx = profiles.firstIndex(where: { $0.id == person.id }), !person.name.isEmpty {
+                    profiles[idx].name = person.name
+                }
+            } else {
+                profiles.append(BibleProfile(id: person.id, name: person.name.isEmpty ? nextProfileName() : person.name))
+            }
+            let incomingMarks = person.bookmarks.map {
+                Passage(translation: $0.translation, bookId: $0.bookId, chapter: $0.chapter, verse: $0.verse)
+            }
+            if person.id == profileId {
+                for mark in incomingMarks where !bookmarks.contains(mark) {
+                    bookmarks.append(mark)
+                }
+                for entry in person.entries {
+                    if let idx = entries.firstIndex(where: { $0.id == entry.id }) {
+                        entries[idx] = entry
+                    } else {
+                        entries.append(entry)
+                    }
+                }
+                if book(id: person.bookId) != nil {
+                    bookId = person.bookId
+                    chapter = max(1, person.chapter)
+                }
+            } else {
+                let existing = Self.readProfileBundle(id: person.id)
+                var marks = existing.bookmarks
+                for mark in incomingMarks where !marks.contains(mark) {
+                    marks.append(mark)
+                }
+                var notes = existing.entries
+                for entry in person.entries {
+                    if let idx = notes.firstIndex(where: { $0.id == entry.id }) {
+                        notes[idx] = entry
+                    } else {
+                        notes.append(entry)
+                    }
+                }
+                writeBundle(id: person.id, bookId: person.bookId, chapter: person.chapter, bookmarks: marks, entries: notes)
+            }
+        }
+        ready = true
+        persistProfiles()
+        persistProfileBundle()
+        refreshFamilyJournal()
+    }
+
+    private func writeBundle(id: UUID, bookId: String, chapter: Int, bookmarks: [Passage], entries: [JournalEntry]) {
+        let defaults = UserDefaults.standard
+        let prefix = "qb.p.\(id.uuidString)"
+        defaults.set(bookId, forKey: "\(prefix).book")
+        defaults.set(chapter, forKey: "\(prefix).chapter")
+        let items = bookmarks.map { StoredPassage(translation: $0.translation, bookId: $0.bookId, chapter: $0.chapter, verse: $0.verse) }
+        if let data = try? JSONEncoder().encode(items) {
+            defaults.set(data, forKey: "\(prefix).bookmarks")
+        }
+        if let data = try? JSONEncoder().encode(entries) {
+            defaults.set(data, forKey: "\(prefix).journal")
+        }
+    }
+
     func hasNote(verse: Int) -> Bool {
         familyOn(bookId: bookId, chapter: chapter, verse: verse).isEmpty == false
     }
@@ -596,7 +714,7 @@ struct JournalEntry: Identifiable, Codable, Equatable {
     }
 }
 
-private struct StoredPassage: Codable {
+struct StoredPassage: Codable {
     var translation: String
     var bookId: String
     var chapter: Int

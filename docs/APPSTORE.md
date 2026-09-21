@@ -33,7 +33,7 @@ bible,kjv,king james,scripture,devotion,prayer,family,kjv bible,holy bible
 
 ## Review notes
 
-No login. Hold a verse for one second, then tap Note or Comment. Profiles are top-right. On iPad the sections are in a sidebar; Command-← / Command-→ turns the chapter. Texts are public-domain WEBU, BBE, and KJV. Maps are public-domain 1915 plates. Nothing is sent off the device.
+No login. Hold a verse for one second, then tap Note or Comment. Profiles are top-right. On iPad the sections are in a sidebar; Command-← / Command-→ turns the chapter. Settings has Export / Import for the family’s writing (local file only) and Write a review. Texts are public-domain WEBU, BBE, and KJV. Maps are public-domain 1915 plates. Nothing is sent off the device. No donate button in the app.
 
 ## Screenshots
 

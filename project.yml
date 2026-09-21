@@ -20,7 +20,7 @@ targets:
         PRODUCT_BUNDLE_IDENTIFIER: com.sw7ft.quietbible
         PRODUCT_NAME: Family Bible
         MARKETING_VERSION: "1.0"
-        CURRENT_PROJECT_VERSION: "52"
+        CURRENT_PROJECT_VERSION: "53"
         TARGETED_DEVICE_FAMILY: "1,2"
         GENERATE_INFOPLIST_FILE: YES
         INFOPLIST_FILE: FamilyBible/Info.plist
