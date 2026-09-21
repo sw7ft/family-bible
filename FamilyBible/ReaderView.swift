@@ -123,8 +123,8 @@ struct ReaderView: View {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button { tapPlace() } label: {
                         Image(systemName: store.isAtPlace ? "book.fill" : "book")
-                            .font(.system(size: 17, weight: .ultraLight))
-                            .foregroundStyle(store.theme.mute.opacity(store.savedPlace == nil ? 0.35 : (store.isAtPlace ? 0.72 : 0.5)))
+                            .font(.system(size: 17, weight: .regular))
+                            .foregroundStyle(placeIconColor)
                             .contentTransition(.symbolEffect(.replace.downUp))
                             .symbolEffect(.bounce, value: markPulse)
                             .frame(width: 22, height: 22)
@@ -152,6 +152,14 @@ struct ReaderView: View {
                     .environmentObject(store)
             }
         }
+    }
+
+    private var placeIconColor: Color {
+        if store.isAtPlace { return store.theme.gold }
+        if store.theme.scheme == .light {
+            return store.theme.ink.opacity(store.savedPlace == nil ? 0.62 : 0.82)
+        }
+        return store.theme.mute.opacity(store.savedPlace == nil ? 0.7 : 0.9)
     }
 
     private var placeBadge: some View {

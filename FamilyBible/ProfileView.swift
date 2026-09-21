@@ -7,8 +7,8 @@ struct ProfileButton: View {
     var body: some View {
         Button { showSheet = true } label: {
             Image(systemName: "person.crop.circle")
-                .font(.system(size: 17, weight: .ultraLight))
-                .foregroundStyle(store.theme.mute.opacity(0.72))
+                .font(.system(size: 17, weight: .regular))
+                .foregroundStyle(store.theme.scheme == .light ? store.theme.ink.opacity(0.78) : store.theme.mute)
                 .frame(width: 22, height: 22)
                 .padding(8)
         }
