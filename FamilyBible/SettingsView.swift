@@ -60,22 +60,26 @@ struct SettingsView: View {
                 }
 
                 Section("Support SW7FT") {
-                    Text("A review is the help Apple welcomes. A tip is optional — nothing in the Bible changes. Apple handles the payment.")
+                    Text(tips.showTips
+                         ? "A review is the help Apple welcomes. A tip is optional — nothing in the Bible changes. Apple handles the payment."
+                         : "A review is the help Apple welcomes.")
                         .font(QuietFont.small(13))
                         .foregroundStyle(store.theme.mute)
                     Button("Write a review") { askReview() }
-                    ForEach(TipStore.offers) { offer in
-                        Button {
-                            Task { await tips.buy(offer) }
-                        } label: {
-                            HStack {
-                                Text(offer.name)
-                                Spacer()
-                                Text(tips.price(for: offer))
-                                    .foregroundStyle(store.theme.mute)
+                    if tips.showTips {
+                        ForEach(TipStore.offers) { offer in
+                            Button {
+                                Task { await tips.buy(offer) }
+                            } label: {
+                                HStack {
+                                    Text(offer.name)
+                                    Spacer()
+                                    Text(tips.price(for: offer))
+                                        .foregroundStyle(store.theme.mute)
+                                }
                             }
+                            .disabled(tips.busy)
                         }
-                        .disabled(tips.busy)
                     }
                     if !tips.status.isEmpty {
                         Text(tips.status)

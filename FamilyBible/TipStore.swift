@@ -16,8 +16,17 @@ final class TipStore: ObservableObject {
     ]
 
     @Published private(set) var products: [Product] = []
+    @Published private(set) var ready = false
     @Published var status = ""
     @Published var busy = false
+
+    var showTips: Bool {
+        #if DEBUG
+        true
+        #else
+        !products.isEmpty
+        #endif
+    }
 
     init() {
         Task { await load() }
@@ -69,6 +78,7 @@ final class TipStore: ObservableObject {
         } catch {
             products = []
         }
+        ready = true
     }
 
     private func listen() async {
