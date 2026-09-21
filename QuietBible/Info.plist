@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleDisplayName</key>
+	<string>Family Bible</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Family Bible uses the camera to attach a picture to a note.</string>
+</dict>
+</plist>
